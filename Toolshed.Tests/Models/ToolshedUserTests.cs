@@ -41,12 +41,12 @@ namespace Toolshed.Tests.Models
             // Arrange
             List<Tool> list_of_tools = new List<Tool>
             {
-                new Tool { ToolId = 1, Description = "cordless drill"},
-                new Tool { ToolId =2, Description = "table saw"}
+                new Tool { ToolId = 1, Name = "cordless drill" },
+                new Tool { ToolId = 2, Name = "table saw" }
             };
             ToolshedUser a_user = new ToolshedUser { UserID = "1", Tools = list_of_tools };
             // Act
-            List<ToolshedUser> actual_tools = a_user.Tools;
+            List<Tool> actual_tools = a_user.Tools;
             // Assert
             CollectionAssert.AreEqual(list_of_tools, actual_tools);
         }
@@ -57,15 +57,32 @@ namespace Toolshed.Tests.Models
             // Arrange
             List<Tool> list_of_borrowed_tools = new List<Tool>
             {
-                new Tool { ToolId = 2, Description = "hammer" },
-                new Tool { ToolId = 3, Description = "nail gun"}
+                new Tool { ToolId = 2, Name = "hammer" },
+                new Tool { ToolId = 3, Name = "nail gun" }
             };
 
             ToolshedUser a_user = new ToolshedUser { UserID = "1", Borrowing = list_of_borrowed_tools };
             // Act
-            List<ToolshedUser> actual_borrowed = a_user.Borrowing;
+            List<Tool> actual_borrowed = a_user.Borrowing;
             // Assert
             CollectionAssert.AreEqual(list_of_borrowed_tools, actual_borrowed);
+        }
+
+        [TestMethod]
+        public void ToolshedUserEnsureUserCanLoanATool()
+        {
+            // Arrange
+            List<Tool> list_of_loaned_tools = new List<Tool>
+            {
+                new Tool { ToolId = 4, Name = "cordless drill" },
+                new Tool { ToolId = 5, Name = "table saw"}
+            };
+
+            ToolshedUser a_user = new ToolshedUser { UserID = "1", Loaning = list_of_loaned_tools };
+            // Act
+            List<Tool> actual_loaned = a_user.Loaning;
+            // Assert
+            CollectionAssert.AreEqual(list_of_loaned_tools, actual_loaned);
         }
     }
 }
