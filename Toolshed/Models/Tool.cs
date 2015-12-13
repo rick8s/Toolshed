@@ -8,10 +8,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Toolshed.Models 
 {
-    public class Tool 
+    public class Tool
     {
         public string Category { get; set; }
-        public string Content { get; set; }
+        public string Description { get; set; }
         public object Owner { get; set; }
         public string Picture { get; set; }
         [Key]
