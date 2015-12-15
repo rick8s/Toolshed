@@ -10,6 +10,6 @@ namespace Toolshed.Models
     {
         public virtual DbSet<ToolshedUser> ToolshedUsers { get; set; }
 
-        public DbSet<Tool> Tools { get; set; }
+        public virtual DbSet<Tool> Tools { get; set; }
     }
 }

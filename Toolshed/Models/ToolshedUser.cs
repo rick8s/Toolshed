@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Toolshed.Models
 {
-    public class ToolshedUser
+    public class ToolshedUser : IComparable
     {
         [Required]
         public string FirstName { get; set; }
@@ -27,6 +27,11 @@ namespace Toolshed.Models
         public List<Tool> Borrowing { get; set; }
         public List<Tool> Loaning { get; set; }
 
-        
+        public int CompareTo(object obj)
+        {
+            ToolshedUser other_user = obj as ToolshedUser;
+            int answer = this.UserName.CompareTo(other_user.UserName);
+            return answer;
+        }
     }
 }
