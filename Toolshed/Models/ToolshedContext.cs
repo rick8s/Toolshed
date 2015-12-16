@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace Toolshed.Models
 {
-    public class ToolshedContext : DbContext
+    public class ToolshedContext : ApplicationDbContext
     {
         public virtual DbSet<ToolshedUser> ToolshedUsers { get; set; }
 
