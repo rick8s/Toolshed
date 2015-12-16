@@ -14,11 +14,12 @@ namespace Toolshed.Models
         public string Name { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
-        public object Owner { get; set; }
+        public virtual ToolshedUser Owner { get; set; }
         public string Picture { get; set; }
         [Key]
         public int ToolId { get; set; }
         public bool Available { get; set; }
+       
 
         public int CompareTo(object obj)
         {
