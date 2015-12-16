@@ -99,6 +99,7 @@
     <Compile Include="Models\ToolTests.cs" />
     <Compile Include="Models\ToolshedUserTests.cs" />
     <Compile Include="Models\ToolshedRepositoryTests.cs" />
+    <Compile Include="Models\ToolReserveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>

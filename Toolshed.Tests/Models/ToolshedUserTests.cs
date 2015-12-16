@@ -16,7 +16,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterUserEnsureJitterUserHasAllTheThings()
+        public void ToolshedUserEnsureJitterUserHasAllTheThings()
         {
             // Arrange
             ToolshedUser a_user = new ToolshedUser();

@@ -18,6 +18,7 @@ namespace Toolshed.Models
         public string Picture { get; set; }
         [Key]
         public int ToolId { get; set; }
+        public bool Available { get; set; }
 
         public int CompareTo(object obj)
         {

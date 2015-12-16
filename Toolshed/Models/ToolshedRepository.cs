@@ -73,5 +73,30 @@ namespace Toolshed.Models
             found_tools.Sort();
             return found_tools;
         }
+
+        public bool CreateTool(ToolshedUser toolshed_user1, string name, string category, string descrip, string pic, int toolid)
+        {
+            Tool a_tool = new Tool { Name = name, Owner = toolshed_user1, Category = category, Description = descrip, Picture = pic, ToolId = toolid };
+            bool is_added = true;
+            try
+            {
+                Tool added_tool = _context.Tools.Add(a_tool);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                is_added = false;
+            }
+            return is_added;
+        }
+
+        public List<Tool> GetAvailableTools()
+        {
+            var query = from tool in _context.Tools select tool;
+            List<Tool> found_available = query.Where(tool => tool.Available == true).ToList();
+
+            List<Tool> found_available_sorted = found_available.OrderBy(tool => tool.Available).ToList();
+            return found_available_sorted;
+        }
     }
 }

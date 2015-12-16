@@ -15,6 +15,8 @@ namespace Toolshed.Tests.Models
         private Mock<ToolshedContext> mock_context;
         private Mock<DbSet<ToolshedUser>> mock_set;
         private Mock<DbSet<Tool>> mock_tool_set;
+        private Mock<DbSet<ToolReserve>> mock_reserved_tool_set;
+
         private ToolshedRepository repository;
 
         private void ConnectMocksToDataStore(IEnumerable<ToolshedUser> data_store)
@@ -43,12 +45,28 @@ namespace Toolshed.Tests.Models
             mock_context.Setup(a => a.Tools).Returns(mock_tool_set.Object);
         }
 
+        private void ConnectMocksToDataStore(IEnumerable<ToolReserve> data_store)
+        {
+            var data_source = data_store.AsQueryable<ToolReserve>();
+
+            mock_reserved_tool_set.As<IQueryable<ToolReserve>>().Setup(data => data.Provider).Returns(data_source.Provider);
+            mock_reserved_tool_set.As<IQueryable<ToolReserve>>().Setup(data => data.Expression).Returns(data_source.Expression);
+            mock_reserved_tool_set.As<IQueryable<ToolReserve>>().Setup(data => data.ElementType).Returns(data_source.ElementType);
+            mock_reserved_tool_set.As<IQueryable<ToolReserve>>().Setup(data => data.GetEnumerator()).Returns(data_source.GetEnumerator());
+
+            // This is Stubbing the Tools property getter
+            mock_context.Setup(a => a.Reserved).Returns(mock_reserved_tool_set.Object);
+        }
+
+
+
         [TestInitialize]
         public void Initialize()
         {
             mock_context = new Mock<ToolshedContext>();
             mock_set = new Mock<DbSet<ToolshedUser>>();
             mock_tool_set = new Mock<DbSet<Tool>>();
+            mock_reserved_tool_set = new Mock<DbSet<ToolReserve>>();
             repository = new ToolshedRepository(mock_context.Object);
         }
 
@@ -58,6 +76,7 @@ namespace Toolshed.Tests.Models
             mock_context = null;
             mock_set = null;
             mock_tool_set = null;
+            mock_reserved_tool_set = null;
             repository = null;
         }
 
@@ -109,7 +128,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterRepositoryEnsureICanGenUserByUserName()
+        public void ToolshedRepositoryEnsureICanGenUserByUserName()
         {
             // Arrange
             var expected = new List<ToolshedUser>
@@ -128,7 +147,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterRepositoryGetUserByUserNameUserDoesNotExist()
+        public void ToolshedRepositoryGetUserByUserNameUserDoesNotExist()
         {
             // Arrange
             var expected = new List<ToolshedUser>
@@ -148,7 +167,7 @@ namespace Toolshed.Tests.Models
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void JitterRepositoryGetUserByUserNameFailsMultipleUsers()
+        public void ToolshedRepositoryGetUserByUserNameFailsMultipleUsers()
         {
             // Arrange
             var expected = new List<ToolshedUser>
@@ -166,7 +185,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterRepositoryEnsureUserNameIsAvailable()
+        public void ToolshedRepositoryEnsureUserNameIsAvailable()
         {
             // Arrange
             var expected = new List<ToolshedUser>
@@ -185,7 +204,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterRepositoryEnsureUserNameIsNotAvailable()
+        public void ToolshedRepositoryEnsureUserNameIsNotAvailable()
         {
             // Arrange
             var expected = new List<ToolshedUser>
@@ -205,7 +224,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterRepositoryEnsureUserNameIsNotAvailableMultipleUsers()
+        public void ToolshedRepositoryEnsureUserNameIsNotAvailableMultipleUsers()
         {
             // Arrange
             var expected = new List<ToolshedUser>
@@ -224,7 +243,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterRepositoryEnsureICanSearchByUserName()
+        public void ToolshedRepositoryEnsureICanSearchByUserName()
         {
             // Arrange
             var expected = new List<ToolshedUser>
@@ -253,7 +272,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterRepositoryEnsureICanSearchByName()
+        public void ToolshedRepositoryEnsureICanSearchByName()
         {
             // Arrange
             var expected = new List<ToolshedUser>
@@ -284,7 +303,7 @@ namespace Toolshed.Tests.Models
         }
 
         [TestMethod]
-        public void JitterRepositoryEnsureICanGetAllTools()
+        public void ToolshedRepositoryEnsureICanGetAllTools()
         {
             // Arrange
             
@@ -306,6 +325,54 @@ namespace Toolshed.Tests.Models
             Assert.AreEqual(expected_tools[1].Name, actual_tools[1].Name);
             Assert.AreEqual(expected_tools[2].Name, actual_tools[2].Name);
             Assert.AreEqual("Cordless Drill", actual_tools[0].Name); // Just to check ourselves
+        }
+
+        [TestMethod]
+        public void ToolshedRepositoryEnsureICanAddATool()
+        {
+            // Arrange
+            
+            List<Tool> expected_tools = new List<Tool>(); // This is our database
+            ConnectMocksToDataStore(expected_tools);
+            ToolshedUser toolshed_user1 = new ToolshedUser { UserName = "toolman" };
+            string name = "Compressor";
+            string category = "Power Tool";
+            string descrip = "10gal 1.25hp";
+            string pic = "https://google.com";
+            int toolid = 1;
+            mock_tool_set.Setup(t => t.Add(It.IsAny<Tool>())).Callback((Tool s) => expected_tools.Add(s));
+            // Act
+            bool successful = repository.CreateTool(toolshed_user1, name, category, descrip, pic, toolid);
+
+            // Assert
+            Assert.AreEqual(1, repository.GetAllTools().Count);
+            // Should this return true?
+            Assert.IsTrue(successful);
+        }
+
+        [TestMethod]
+        public void ToolRepositoryEnsureBorrowedToolIsUnavailable()
+        {
+            //Arrange
+            
+            List<Tool> list_of_tools = new List<Tool>
+            {
+                new Tool { ToolId = 1, Name = "cordless drill", Available = true },
+                new Tool { ToolId = 2, Name = "table saw", Available = true },
+                new Tool { ToolId = 3, Name = "band saw", Available = false },
+                new Tool { ToolId = 4, Name = "compressor", Available = true }
+            };
+            
+            ConnectMocksToDataStore(list_of_tools);
+
+            //Act
+            List<Tool> available_tools = repository.GetAvailableTools();
+
+            //Assert
+
+            Assert.AreEqual(list_of_tools[0].ToolId, available_tools[0].ToolId);
+            Assert.AreEqual(list_of_tools[1].ToolId, available_tools[1].ToolId);
+            Assert.AreEqual(list_of_tools[3].ToolId, available_tools[2].ToolId);
         }
     }
 }
