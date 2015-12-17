@@ -15,7 +15,7 @@ namespace Toolshed.Models
         public string Category { get; set; }
         public string Description { get; set; }
         public virtual ToolshedUser Owner { get; set; }
-        public string Picture { get; set; }
+        public string Image { get; set; }
         [Key]
         public int ToolId { get; set; }
         public bool Available { get; set; }

@@ -76,7 +76,7 @@ namespace Toolshed.Models
 
         public bool CreateTool(ToolshedUser toolshed_user1, string name, string category, string descrip, string pic, int toolid)
         {
-            Tool a_tool = new Tool { Name = name, Owner = toolshed_user1, Category = category, Description = descrip, Picture = pic, ToolId = toolid };
+            Tool a_tool = new Tool { Name = name, Owner = toolshed_user1, Category = category, Description = descrip, Image = pic, ToolId = toolid };
             bool is_added = true;
             try
             {
