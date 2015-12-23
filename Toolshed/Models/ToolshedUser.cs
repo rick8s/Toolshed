@@ -27,6 +27,7 @@ namespace Toolshed.Models
 
         public List<Tool> Tools { get; set; }
         public List<Tool> Borrowing { get; set; }
+        public List<Tool> Loaning { get; set; }
  
 
         public int CompareTo(object obj)

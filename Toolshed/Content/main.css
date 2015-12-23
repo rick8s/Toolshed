@@ -1,0 +1,33 @@
+﻿body {
+    background-color: rgb(234, 238, 242);
+}
+
+.green {
+    border: 1px solid green;
+}
+
+.red {
+    border: 1px solid red;
+}
+
+.tool {
+    margin: 20px;  
+    min-height: 100px; 
+    border-radius: 5px; 
+    padding: 20px;
+    border: 1px solid rgba(111,113,114, 0.4); /* #6F717288; */
+    /*Forcing use to RGBA*/
+    background-color: white;
+    transition: background-color 0.1s linear 0s;
+    -moz-transition: background-color 100ms linear 0s;
+}
+
+.tool:hover {
+    background-color: rgba(185,188,191, 0.44);
+
+    cursor: pointer;
+}
+
+.tool-hover {
+    background-color: rgb(185,188,191);
+}

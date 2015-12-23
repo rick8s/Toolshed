@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Web.Http;
 using System.Web;
 using System.Web.Mvc;
 using Toolshed.Models;
@@ -12,8 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Toolshed.Controllers
 {
-    {
-    public class ToolshedController : Controller
+     public class ToolshedController : Controller
+
     {
 
         public ToolshedRepository Repo { get; set; }

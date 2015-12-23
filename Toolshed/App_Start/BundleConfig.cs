@@ -25,7 +25,16 @@ namespace Toolshed
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/main.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/Content/myjavascript").Include(
+                      "~/Content/custom.js"));
+            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
+                "~/Scripts/angular.js",
+                "~/Scripts/angular-aria.js", 
+                "~/Scripts/app.js"
+                ));
         }
     }
 }

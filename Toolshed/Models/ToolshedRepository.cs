@@ -98,5 +98,12 @@ namespace Toolshed.Models
             List<Tool> found_available_sorted = found_available.OrderBy(tool => tool.Available).ToList();
             return found_available_sorted;
         }
+
+        public List<Tool> GetUserTools(ToolshedUser user)
+        {
+            var query = from u in _context.ToolshedUsers where u.UserId == u.UserId select u;
+            ToolshedUser found_user = query.Single<ToolshedUser>();
+            return found_user.Tools;
+        }
     }
 }

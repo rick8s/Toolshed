@@ -17,7 +17,7 @@ namespace Toolshed.Controllers
         {
             ViewBag.Message = "Your application description page.";
 
-            List
+            return View();
         }
 
         public ActionResult Contact()

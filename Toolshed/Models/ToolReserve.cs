@@ -13,6 +13,7 @@ namespace Toolshed.Models
         public int ReserveId { get; set; }
         public string ReserveDate { get; set; }
         public string Who { get; set; }   
-        public string Item { get; set; }
+        public int ItemId { get; set; }
+        public string ItemName { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace Toolshed.Migrations
                 new ToolshedUser() { UserId = 1, UserName = "garagedude", FirstName = "Sam", LastName = "Sneed", Phone = "111-222-3333", Street = "9th Fairway" },
                 new ToolshedUser() { UserId = 2, UserName = "shoprat", FirstName = "Pete", LastName = "Sampras", Phone = "111-222-4444", Street = "Center Court" },
                 new ToolshedUser() { UserId = 3, UserName = "toolman", FirstName = "Tim", LastName = "Taylor", Phone = "111-222-5555", Street = "Some Street" },
-                new ToolshedUser() { UserId = 4, UserName = "tooldaddy", FirstName = "Samuel", LastName = "Adams", Phone = "111-222-6666", Street = "Ale Avenue" }
+                new ToolshedUser() { UserId = 4, UserName = "tooldaddy", FirstName = "Samuel", LastName = "Adams", Phone = "111-222-6666", Street = "Pale Ale Avenue" }
                 );
             context.SaveChanges();
 
@@ -53,7 +53,7 @@ namespace Toolshed.Migrations
             Tool tool_four = context.Tools.Where(t => t.ToolId == 4).Single();
 
             context.Reserved.AddOrUpdate(r => r.ReserveId,
-               new ToolReserve() { ReserveId = 1, ReserveDate = "12-21", Who = user_one.UserName, Item = tool_four.Name }
+               new ToolReserve() { ReserveId = 1, ReserveDate = "12-21", Who = user_one.UserName, ItemId = tool_four.ToolId, ItemName = tool_four.Name}
                 );
             context.SaveChanges();
         }
