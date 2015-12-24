@@ -14,7 +14,8 @@ namespace Toolshed.Migrations
                         ReserveId = c.Int(nullable: false, identity: true),
                         ReserveDate = c.String(),
                         Who = c.String(),
-                        Item = c.String(),
+                        ItemId = c.Int(nullable: false),
+                        ItemName = c.String(),
                     })
                 .PrimaryKey(t => t.ReserveId);
             
@@ -53,14 +54,17 @@ namespace Toolshed.Migrations
                         Available = c.Boolean(nullable: false),
                         ToolshedUser_UserId = c.Int(),
                         ToolshedUser_UserId1 = c.Int(),
+                        ToolshedUser_UserId2 = c.Int(),
                         Owner_UserId = c.Int(),
                     })
                 .PrimaryKey(t => t.ToolId)
                 .ForeignKey("dbo.ToolshedUsers", t => t.ToolshedUser_UserId)
                 .ForeignKey("dbo.ToolshedUsers", t => t.ToolshedUser_UserId1)
+                .ForeignKey("dbo.ToolshedUsers", t => t.ToolshedUser_UserId2)
                 .ForeignKey("dbo.ToolshedUsers", t => t.Owner_UserId)
                 .Index(t => t.ToolshedUser_UserId)
                 .Index(t => t.ToolshedUser_UserId1)
+                .Index(t => t.ToolshedUser_UserId2)
                 .Index(t => t.Owner_UserId);
             
             CreateTable(
@@ -73,8 +77,11 @@ namespace Toolshed.Migrations
                         UserName = c.String(nullable: false, maxLength: 15),
                         Phone = c.String(),
                         Street = c.String(nullable: false),
+                        RealUser_Id = c.String(maxLength: 128),
                     })
-                .PrimaryKey(t => t.UserId);
+                .PrimaryKey(t => t.UserId)
+                .ForeignKey("dbo.AspNetUsers", t => t.RealUser_Id)
+                .Index(t => t.RealUser_Id);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -125,17 +132,21 @@ namespace Toolshed.Migrations
         
         public override void Down()
         {
+            DropForeignKey("dbo.Tools", "Owner_UserId", "dbo.ToolshedUsers");
+            DropForeignKey("dbo.Tools", "ToolshedUser_UserId2", "dbo.ToolshedUsers");
+            DropForeignKey("dbo.ToolshedUsers", "RealUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Tools", "Owner_UserId", "dbo.ToolshedUsers");
             DropForeignKey("dbo.Tools", "ToolshedUser_UserId1", "dbo.ToolshedUsers");
             DropForeignKey("dbo.Tools", "ToolshedUser_UserId", "dbo.ToolshedUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
+            DropIndex("dbo.ToolshedUsers", new[] { "RealUser_Id" });
             DropIndex("dbo.Tools", new[] { "Owner_UserId" });
+            DropIndex("dbo.Tools", new[] { "ToolshedUser_UserId2" });
             DropIndex("dbo.Tools", new[] { "ToolshedUser_UserId1" });
             DropIndex("dbo.Tools", new[] { "ToolshedUser_UserId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });

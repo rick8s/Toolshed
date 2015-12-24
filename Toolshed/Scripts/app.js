@@ -18,4 +18,5 @@ app.controller('Controller', ["$scope", "$http", function ($scope, $http) {
             })
             .error(function (error) { alert(error.error) });
     }
+
 }]);

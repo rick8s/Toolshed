@@ -1,3 +1,24 @@
-﻿@{
-    Layout = "~/Views/Shared/_JitterLayout.cshtml";
+﻿@model IEnumerable<Toolshed.Models.Tool>
+@{
+    Layout = "~/Views/Shared/_ToolshedLayout.cshtml";
+}
+<div class="row"><h2>Available Tools:</h2></div>
+@foreach (var item in Model)
+   
+    {
+    if (@item.Available == true)
+    {
+       
+         <div class="row">
+            <div class="col-lg-12">
+                <div class="tool">
+                    <ul>
+                        <li>@item.Image</li>
+                        <li>@item.Name</li>
+                        <li>@item.ToolId</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
 }

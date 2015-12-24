@@ -96,6 +96,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\TestControllerTests.cs" />
     <Compile Include="Models\ToolTests.cs" />
     <Compile Include="Models\ToolshedUserTests.cs" />
     <Compile Include="Models\ToolshedRepositoryTests.cs" />
