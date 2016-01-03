@@ -105,5 +105,29 @@ namespace Toolshed.Models
             ToolshedUser found_user = query.Single<ToolshedUser>();
             return found_user.Tools;
         }
+
+        public bool CreateJitterUser(ApplicationUser app_user, string new_user_name)
+        {
+            bool handle_is_available = this.IsUserNameAvailable(new_user_name);
+            if (handle_is_available)
+            {
+                ToolshedUser new_user = new ToolshedUser { RealUser = app_user, UserName = new_user_name };
+                bool is_added = true;
+                try
+                {
+                    ToolshedUser added_user = _context.ToolshedUsers.Add(new_user);
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    is_added = false;
+                }
+                return is_added;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
