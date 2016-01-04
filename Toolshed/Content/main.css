@@ -2,13 +2,6 @@
     background-color: rgb(234, 238, 242);
 }
 
-.green {
-    border: 1px solid green;
-}
-
-.red {
-    border: 1px solid red;
-}
 
 .tool {
     margin: 20px;  
@@ -30,4 +23,11 @@
 
 .tool-hover {
     background-color: rgb(185,188,191);
+}
+
+.row {
+    padding-top: 10px; 
+}
+#search {
+    float:right;
 }
