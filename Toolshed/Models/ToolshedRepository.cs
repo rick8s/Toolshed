@@ -101,12 +101,30 @@ namespace Toolshed.Models
 
         public List<Tool> GetUserTools(ToolshedUser user)
         {
-            var query = from u in _context.ToolshedUsers where u.UserId == u.UserId select u;
-            ToolshedUser found_user = query.Single<ToolshedUser>();
-            return found_user.Tools;
+                      
+            if (user != null)
+            {
+                var query = from u in _context.ToolshedUsers where u.UserId == u.UserId select u;
+                ToolshedUser found_user = query.Single<ToolshedUser>();
+                if (found_user == null)
+                {
+                    return new List<Tool>();
+                }
+                return found_user.Tools;
+            }
+            else
+            {
+                return new List<Tool>();
+            }
         }
 
-        public bool CreateJitterUser(ApplicationUser app_user, string new_user_name)
+        public void DeleteAllUsers()
+        {
+            Context.ToolshedUsers.RemoveRange(Context.ToolshedUsers);
+            Context.SaveChanges();
+        }
+
+        public bool CreateToolshedUser(ApplicationUser app_user, string new_user_name)
         {
             bool handle_is_available = this.IsUserNameAvailable(new_user_name);
             if (handle_is_available)
